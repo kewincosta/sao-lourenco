@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    /* TypeORM entities use the ORM to populate properties at runtime,
+       so we relax definite-initialization to keep entities free of `!`. */
+    "strictPropertyInitialization": false,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
