@@ -24,9 +24,6 @@ export default defineConfig({
     environment: 'node',
     include: ['src/**/*.{spec,test}.ts'],
     setupFiles: ['reflect-metadata'],
-    // E2E tests share a single Postgres database, so run them in one process.
-    pool: 'forks',
-    poolOptions: { forks: { singleFork: true } },
     hookTimeout: 30_000,
     testTimeout: 30_000,
   },

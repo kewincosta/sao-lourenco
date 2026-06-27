@@ -1,31 +1,30 @@
 import { faker } from '@faker-js/faker';
 import type { FastifyInstance } from 'fastify';
 import request from 'supertest';
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildApp } from '../../../app';
-import {
-  closeTestDatabase,
-  generateValidCPF,
-  initTestDatabase,
-  truncateDatabase,
-} from '../../../test/helpers';
+import { resetMockDataSource } from '../../../test/mock-data-source';
+import { generateValidCPF } from '../../../test/helpers';
+
+vi.mock('../../../shared/database/data-source', async () => {
+  const { getRepositoryMock } = await import('../../../test/mock-data-source');
+  return { AppDataSource: { getRepository: getRepositoryMock } };
+});
 
 describe('POST /services/:id/reviews (E2E)', () => {
   let app: FastifyInstance;
 
   beforeAll(async () => {
-    await initTestDatabase();
     app = await buildApp();
     await app.ready();
   });
 
   afterAll(async () => {
     await app.close();
-    await closeTestDatabase();
   });
 
-  beforeEach(async () => {
-    await truncateDatabase();
+  beforeEach(() => {
+    resetMockDataSource();
   });
 
   async function createService(): Promise<string> {
