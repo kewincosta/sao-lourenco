@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { DOCUMENT_TYPES } from '../../../shared/types';
+import { DOCUMENT_TYPES } from '@sao-lourenco/shared';
 import { isValidDocument } from '../../../shared/utils/document';
 
 export const createUserSchema = z

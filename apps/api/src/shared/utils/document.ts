@@ -1,4 +1,4 @@
-import type { DocumentType } from '../types';
+import type { DocumentType } from '@sao-lourenco/shared';
 
 /** Remove tudo que não for dígito. */
 export function onlyDigits(value: string): string {

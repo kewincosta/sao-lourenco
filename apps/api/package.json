@@ -20,6 +20,7 @@
     "migration:revert": "pnpm exec tsx $(node -e \"console.log(require.resolve('typeorm/cli.js'))\") migration:revert -d ./src/shared/database/data-source.ts"
   },
   "dependencies": {
+    "@sao-lourenco/shared": "workspace:*",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "fastify": "^5.2.0",

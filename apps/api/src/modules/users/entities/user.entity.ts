@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import type { DocumentType } from '../../../shared/types';
+import type { DocumentType } from '@sao-lourenco/shared';
 import { Service } from '../../services/entities/service.entity';
 
 @Entity('users')
