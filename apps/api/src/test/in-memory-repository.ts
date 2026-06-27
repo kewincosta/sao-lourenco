@@ -66,10 +66,7 @@ export function createInMemoryRepository<T extends { id: string }>(): FakeReposi
         result = result.filter((row) => matches(row, options.where as WhereClause<T>));
       }
       if (options?.order) {
-        const [field, direction] = Object.entries(options.order)[0] as [
-          keyof T,
-          'ASC' | 'DESC',
-        ];
+        const [field, direction] = Object.entries(options.order)[0] as [keyof T, 'ASC' | 'DESC'];
         result = [...result].sort((a, b) => {
           const aVal = a[field] as unknown as Date;
           const bVal = b[field] as unknown as Date;

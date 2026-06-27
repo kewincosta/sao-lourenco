@@ -1,0 +1,9 @@
+**/dist
+**/node_modules
+**/coverage
+**/*.tsbuildinfo
+pnpm-lock.yaml
+**/migrations/**
+.agents
+.claude
+.specs

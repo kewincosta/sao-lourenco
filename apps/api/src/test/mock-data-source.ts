@@ -23,8 +23,10 @@ const registry = new Map<EntityClass, FakeRepository<any>>();
  * }));
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getRepositoryMock<T extends { id: string }>(Entity: EntityClass): FakeRepository<T> {
+
+export function getRepositoryMock<T extends { id: string }>(
+  Entity: EntityClass,
+): FakeRepository<T> {
   let fake = registry.get(Entity);
   if (!fake) {
     fake = createInMemoryRepository<T>();
