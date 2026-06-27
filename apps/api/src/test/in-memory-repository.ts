@@ -41,18 +41,14 @@ export function createInMemoryRepository<T extends { id: string }>(): FakeReposi
     async save(entity: T): Promise<T> {
       const now = new Date();
       const isNew = !entity.id;
+      const stamped = entity as T & { createdAt?: Date; updatedAt?: Date };
       if (isNew) {
-        entity.id = crypto.randomUUID();
+        stamped.id = crypto.randomUUID();
+        stamped.createdAt = now;
       }
-      if ('createdAt' in entity || isNew) {
-        (entity as T & { createdAt?: Date }).createdAt =
-          (entity as T & { createdAt?: Date }).createdAt ?? now;
-      }
-      if ('updatedAt' in entity) {
-        (entity as T & { updatedAt?: Date }).updatedAt = now;
-      }
-      rows.set(entity.id, entity);
-      return entity;
+      stamped.updatedAt = now;
+      rows.set(stamped.id, stamped);
+      return stamped;
     },
 
     async findOne(options: FindOneOptions<T>): Promise<T | null> {
