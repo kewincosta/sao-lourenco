@@ -1,26 +1,3 @@
-import { AppDataSource } from '../shared/database/data-source';
-
-/** Inicializa o DataSource de teste e garante o schema (idempotente). */
-export async function initTestDatabase(): Promise<void> {
-  if (!AppDataSource.isInitialized) {
-    await AppDataSource.initialize();
-  }
-  await AppDataSource.runMigrations();
-}
-
-export async function closeTestDatabase(): Promise<void> {
-  if (AppDataSource.isInitialized) {
-    await AppDataSource.destroy();
-  }
-}
-
-/** Limpa os dados entre os testes mantendo o schema/migrations. */
-export async function truncateDatabase(): Promise<void> {
-  await AppDataSource.query(
-    'TRUNCATE TABLE "reviews", "services", "users" RESTART IDENTITY CASCADE',
-  );
-}
-
 // --- Geradores de documentos válidos (dígitos verificadores corretos) ---
 
 export function generateValidCPF(): string {
