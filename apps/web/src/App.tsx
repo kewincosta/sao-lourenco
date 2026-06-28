@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react';
 import { Toaster, toast } from 'sonner';
-import { useKV } from '@github/spark/hooks';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { ServiceCard } from './components/ServiceCard';
@@ -55,14 +54,14 @@ import {
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
-  const [user, setUser] = useKV<UserType | null>('auth-user', null);
+  const [user, setUser] = useState<UserType | null>(null);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [selectedAttractionId, setSelectedAttractionId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<ServiceCategory | 'all'>('all');
 
-  const [userServices, setUserServices] = useKV<Service[]>('user-services', []);
-  const [allReviews, setAllReviews] = useKV<Review[]>('all-reviews', mockReviews);
+  const [userServices, setUserServices] = useState<Service[]>([]);
+  const [allReviews, setAllReviews] = useState<Review[]>(mockReviews);
 
   const allServices = useMemo(() => {
     return [...mockServices, ...(userServices || [])];
@@ -146,7 +145,7 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header currentView={currentView} onNavigate={setCurrentView} />
+      <Header user={user} currentView={currentView} onNavigate={setCurrentView} />
 
       <main className="flex-1">
         {currentView === 'home' && (

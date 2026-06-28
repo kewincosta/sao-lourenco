@@ -2,16 +2,15 @@ import { useState } from 'react';
 import { House, MapPin, Briefcase, UserCircle, List, X } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useKV } from '@github/spark/hooks';
 import type { User } from '@/lib/types';
 
 interface HeaderProps {
   currentView: string;
   onNavigate: (view: string) => void;
+  user: User | null;
 }
 
-export function Header({ currentView, onNavigate }: HeaderProps) {
-  const [user] = useKV<User | null>('auth-user', null);
+export function Header({ currentView, onNavigate, user }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const navigation = [
