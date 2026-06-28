@@ -29,15 +29,18 @@ apps/
 │       ├── test/           # harness determinístico (fake repo + mock do data-source)
 │       ├── app.ts          # buildApp() — Fastify + rotas (testável)
 │       └── server.ts       # bootstrap — DataSource + migrations + listen
-└── web/                 # @sao-lourenco/web — placeholder (React + Vite via clone futuro)
+└── web/                 # @sao-lourenco/web — front (React 19 + Vite 7 + Tailwind v4 + shadcn/Radix)
 
 packages/
 └── shared/              # @sao-lourenco/shared — contratos/tipos/Zod compartilhados
 ```
 
 `apps/api` consome `@sao-lourenco/shared` via `workspace:*` (tipos resolvidos
-da fonte em dev/typecheck/test, do `dist` em runtime/build). `apps/web` é um
-slot reservado — ainda sem código, ver `apps/web/README.md`.
+da fonte em dev/typecheck/test, do `dist` em runtime/build). `apps/web` foi
+migrado de um clone GitHub Spark para o monorepo pnpm e está funcional —
+ver `apps/web/README.md` para stack, comandos (`pnpm --filter @sao-lourenco/web
+{dev,build,typecheck,lint}`) e a nota sobre persistência de dados em memória
+(sem backend integrado ainda).
 
 ## Como rodar (local)
 
