@@ -10,6 +10,7 @@ export function useAddReview() {
     mutationFn: (input: AddReviewInput) => addReview(input),
     onSuccess: (_review, input) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.reviews(input.serviceId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.allReviews });
       queryClient.invalidateQueries({ queryKey: queryKeys.services });
     },
   });
