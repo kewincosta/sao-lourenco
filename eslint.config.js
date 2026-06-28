@@ -13,12 +13,6 @@ module.exports = tseslint.config(
       '**/migrations/**',
       '**/*.tsbuildinfo',
       'eslint.config.js',
-      // SPEC_DEVIATION: portal-turstico-so-l is the original Spark clone,
-      // already superseded by apps/web (T1-T6) and scheduled for removal in
-      // T9. It is not a workspace member and was never meant to be linted;
-      // excluding it here unblocks the root `eslint .` gate for T7 without
-      // touching its (soon to be deleted) content.
-      'portal-turstico-so-l/**',
     ],
   },
   js.configs.recommended,
