@@ -43,7 +43,7 @@ import {
   Pencil,
   Trash,
 } from '@phosphor-icons/react';
-import { mockUsers, mockServices, mockReviews, mockAttractions } from './lib/mock-data';
+import { mockUsers, mockServices, mockReviews, mockAttractions } from '@/services/mock-data';
 import {
   categoryLabels,
   type User as UserType,
