@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { House, MapPin, Briefcase, UserCircle, List, X } from '@phosphor-icons/react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import type { User } from '@/lib/types';
+import { Button } from '@/shared/common/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/shared/common/ui/sheet';
+import type { User } from '@/shared/types';
 
 interface HeaderProps {
   currentView: string;

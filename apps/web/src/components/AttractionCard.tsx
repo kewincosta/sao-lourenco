@@ -1,6 +1,6 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { attractionCategoryLabels, type Attraction } from '@/lib/types';
+import { Card, CardContent } from '@/shared/common/ui/card';
+import { Badge } from '@/shared/common/ui/badge';
+import { attractionCategoryLabels, type Attraction } from '@/shared/types';
 import { MapPin } from '@phosphor-icons/react';
 
 interface AttractionCardProps {

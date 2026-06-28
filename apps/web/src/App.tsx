@@ -4,29 +4,29 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { ServiceCard } from './components/ServiceCard';
 import { AttractionCard } from './components/AttractionCard';
-import { RatingStars } from './components/RatingStars';
-import { Button } from './components/ui/button';
-import { Input } from './components/ui/input';
-import { Label } from './components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
+import { RatingStars } from '@/shared/common/RatingStars/RatingStars';
+import { Button } from '@/shared/common/ui/button';
+import { Input } from '@/shared/common/ui/input';
+import { Label } from '@/shared/common/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/common/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './components/ui/select';
-import { Textarea } from './components/ui/textarea';
-import { Badge } from './components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
+} from '@/shared/common/ui/select';
+import { Textarea } from '@/shared/common/ui/textarea';
+import { Badge } from '@/shared/common/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/common/ui/tabs';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from './components/ui/dialog';
-import { Separator } from './components/ui/separator';
+} from '@/shared/common/ui/dialog';
+import { Separator } from '@/shared/common/ui/separator';
 import {
   MagnifyingGlass,
   MapPin,
@@ -50,7 +50,7 @@ import {
   type Service,
   type Review,
   type ServiceCategory,
-} from './lib/types';
+} from '@/shared/types';
 
 function App() {
   const [currentView, setCurrentView] = useState('home');

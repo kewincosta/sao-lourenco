@@ -1,6 +1,6 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { categoryLabels, type Service } from '@/lib/types';
+import { Card, CardContent } from '@/shared/common/ui/card';
+import { Badge } from '@/shared/common/ui/badge';
+import { categoryLabels, type Service } from '@/shared/types';
 import { MapPin, User, Star, CheckCircle } from '@phosphor-icons/react';
 
 interface ServiceCardProps {

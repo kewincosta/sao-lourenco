@@ -1,4 +1,4 @@
-import { User, Service, Review, Attraction } from './types';
+import { User, Service, Review, Attraction } from '@/shared/types';
 
 export const mockUsers: User[] = [
   {
