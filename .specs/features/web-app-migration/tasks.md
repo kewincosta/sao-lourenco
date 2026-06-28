@@ -152,6 +152,7 @@ T7 ──┬─→ T8 [P]
 **Tests**: none
 **Gate**: Build (deferido p/ T7)
 **Commit**: `feat(web): add pnpm-aligned package.json`
+**Status**: ✅ Done (commit `f18714e`)
 
 ---
 
@@ -250,6 +251,7 @@ T7 ──┬─→ T8 [P]
 **Tests**: none
 **Gate**: Build (raiz)
 **Commit**: `build(web): link workspace, format, and pass build gates`
+**Status**: ✅ Done (commit `ef24eba`; SPEC_DEVIATION: added `portal-turstico-so-l/**` to root `eslint.config.js` ignores — the clone is non-workspace content scheduled for removal in T9 and was failing the root `eslint .` gate; see commit message)
 
 ---
 
