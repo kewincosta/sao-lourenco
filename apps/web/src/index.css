@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @layer base {
   * {
@@ -9,13 +9,13 @@
 
 :root {
   --background: oklch(0.98 0.01 75);
-  --foreground: oklch(0.20 0 0);
+  --foreground: oklch(0.2 0 0);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.20 0 0);
-  
+  --card-foreground: oklch(0.2 0 0);
+
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.20 0 0);
+  --popover-foreground: oklch(0.2 0 0);
 
   --primary: oklch(0.38 0.08 230);
   --primary-foreground: oklch(1 0 0);
@@ -24,7 +24,7 @@
   --secondary-foreground: oklch(1 0 0);
 
   --muted: oklch(0.96 0.005 0);
-  --muted-foreground: oklch(0.50 0 0);
+  --muted-foreground: oklch(0.5 0 0);
 
   --accent: oklch(0.68 0.09 215);
   --accent-foreground: oklch(0.98 0.01 75);
@@ -32,15 +32,15 @@
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(1 0 0);
 
-  --border: oklch(0.90 0.005 0);
-  --input: oklch(0.90 0.005 0);
+  --border: oklch(0.9 0.005 0);
+  --input: oklch(0.9 0.005 0);
   --ring: oklch(0.68 0.09 215);
 
   --cta: oklch(0.58 0.14 35);
   --cta-foreground: oklch(1 0 0);
 
   --support: oklch(0.75 0.08 215);
-  --support-foreground: oklch(0.20 0 0);
+  --support-foreground: oklch(0.2 0 0);
 
   --fresh-sky: oklch(0.78 0.08 230);
   --mineral-aqua: oklch(0.72 0.09 215);
@@ -91,7 +91,12 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-serif font-bold;
   }
 
