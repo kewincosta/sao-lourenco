@@ -6,11 +6,13 @@ import { Footer } from './components/Footer';
 import { ServiceCard } from './components/ServiceCard';
 import { AttractionCard } from './components/AttractionCard';
 import { RegisterPage } from '@/pages/Register';
+import { LoginPage } from '@/pages/Login';
+import { useAuthStore } from '@/shared/stores/auth.store';
 import { RatingStars } from '@/shared/common/RatingStars/RatingStars';
 import { Button } from '@/shared/common/ui/button';
 import { Input } from '@/shared/common/ui/input';
 import { Label } from '@/shared/common/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/common/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/common/ui/card';
 import {
   Select,
   SelectContent,
@@ -66,7 +68,8 @@ const queryClient = new QueryClient({
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
-  const [user, setUser] = useState<UserType | null>(null);
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [selectedAttractionId, setSelectedAttractionId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -112,22 +115,8 @@ function App() {
     return reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
   };
 
-  const handleLogin = (document: string) => {
-    const foundUser = mockUsers.find(
-      (u) => u.document.replace(/\D/g, '') === document.replace(/\D/g, ''),
-    );
-    if (foundUser) {
-      setUser(foundUser);
-      setCurrentView('dashboard');
-      toast.success(`Bem-vindo, ${foundUser.name}!`);
-      return true;
-    }
-    toast.error('CPF/CNPJ não encontrado');
-    return false;
-  };
-
   const handleLogout = () => {
-    setUser(null);
+    logout();
     setCurrentView('home');
     toast.success('Logout realizado com sucesso');
   };
@@ -180,7 +169,7 @@ function App() {
               getServiceReviews={getServiceReviews}
             />
           )}
-          {currentView === 'login' && <LoginPage onLogin={handleLogin} />}
+          {currentView === 'login' && <LoginPage onNavigate={setCurrentView} />}
           {currentView === 'register' && <RegisterPage onNavigate={setCurrentView} />}
           {currentView === 'dashboard' && user && (
             <DashboardPage
@@ -566,48 +555,6 @@ function ServicesPage({
             ))}
           </div>
         )}
-      </div>
-    </section>
-  );
-}
-
-function LoginPage({ onLogin }: { onLogin: (document: string) => boolean }) {
-  const [document, setDocument] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onLogin(document);
-  };
-
-  return (
-    <section className="py-16 md:py-24">
-      <div className="container mx-auto px-4 sm:px-6">
-        <Card className="max-w-md mx-auto">
-          <CardHeader>
-            <CardTitle className="text-2xl font-serif">Entrar</CardTitle>
-            <CardDescription>Acesse sua conta com CPF ou CNPJ</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="document">CPF ou CNPJ</Label>
-                <Input
-                  id="document"
-                  placeholder="000.000.000-00 ou 00.000.000/0000-00"
-                  value={document}
-                  onChange={(e) => setDocument(e.target.value)}
-                  required
-                />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Use qualquer CPF/CNPJ dos usuários mockados
-                </p>
-              </div>
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
-                Entrar
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
       </div>
     </section>
   );
