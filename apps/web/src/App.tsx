@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster, toast } from 'sonner';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -51,6 +52,16 @@ import {
   type Review,
   type ServiceCategory,
 } from '@/shared/types';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      staleTime: Infinity,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
@@ -144,69 +155,71 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header user={user} currentView={currentView} onNavigate={setCurrentView} />
+    <QueryClientProvider client={queryClient}>
+      <div className="min-h-screen flex flex-col">
+        <Header user={user} currentView={currentView} onNavigate={setCurrentView} />
 
-      <main className="flex-1">
-        {currentView === 'home' && (
-          <HomePage onNavigate={setCurrentView} onServiceClick={setSelectedServiceId} />
-        )}
-        {currentView === 'attractions' && (
-          <AttractionsPage onAttractionClick={setSelectedAttractionId} />
-        )}
-        {currentView === 'services' && (
-          <ServicesPage
-            services={filteredServices}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            categoryFilter={categoryFilter}
-            setCategoryFilter={setCategoryFilter}
-            onServiceClick={setSelectedServiceId}
-            getServiceProvider={getServiceProvider}
-            getServiceAverageRating={getServiceAverageRating}
-            getServiceReviews={getServiceReviews}
-          />
-        )}
-        {currentView === 'login' && <LoginPage onLogin={handleLogin} />}
-        {currentView === 'register' && <RegisterPage onNavigate={setCurrentView} />}
-        {currentView === 'dashboard' && user && (
-          <DashboardPage
-            user={user}
-            userServices={userServices}
-            setUserServices={setUserServices}
-            allReviews={allReviews}
-            onLogout={handleLogout}
-            onDeleteService={handleDeleteService}
-          />
-        )}
-      </main>
-
-      <Footer />
-
-      {selectedService && (
-        <Dialog open={!!selectedService} onOpenChange={() => setSelectedServiceId(null)}>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-            <ServiceDetailModal
-              service={selectedService}
-              provider={getServiceProvider(selectedService.userId)}
-              reviews={getServiceReviews(selectedService.id)}
-              averageRating={getServiceAverageRating(selectedService.id)}
-              onAddReview={handleAddReview}
+        <main className="flex-1">
+          {currentView === 'home' && (
+            <HomePage onNavigate={setCurrentView} onServiceClick={setSelectedServiceId} />
+          )}
+          {currentView === 'attractions' && (
+            <AttractionsPage onAttractionClick={setSelectedAttractionId} />
+          )}
+          {currentView === 'services' && (
+            <ServicesPage
+              services={filteredServices}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              categoryFilter={categoryFilter}
+              setCategoryFilter={setCategoryFilter}
+              onServiceClick={setSelectedServiceId}
+              getServiceProvider={getServiceProvider}
+              getServiceAverageRating={getServiceAverageRating}
+              getServiceReviews={getServiceReviews}
             />
-          </DialogContent>
-        </Dialog>
-      )}
+          )}
+          {currentView === 'login' && <LoginPage onLogin={handleLogin} />}
+          {currentView === 'register' && <RegisterPage onNavigate={setCurrentView} />}
+          {currentView === 'dashboard' && user && (
+            <DashboardPage
+              user={user}
+              userServices={userServices}
+              setUserServices={setUserServices}
+              allReviews={allReviews}
+              onLogout={handleLogout}
+              onDeleteService={handleDeleteService}
+            />
+          )}
+        </main>
 
-      {selectedAttraction && (
-        <Dialog open={!!selectedAttraction} onOpenChange={() => setSelectedAttractionId(null)}>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-            <AttractionDetailModal attraction={selectedAttraction} />
-          </DialogContent>
-        </Dialog>
-      )}
+        <Footer />
 
-      <Toaster richColors position="top-right" />
-    </div>
+        {selectedService && (
+          <Dialog open={!!selectedService} onOpenChange={() => setSelectedServiceId(null)}>
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+              <ServiceDetailModal
+                service={selectedService}
+                provider={getServiceProvider(selectedService.userId)}
+                reviews={getServiceReviews(selectedService.id)}
+                averageRating={getServiceAverageRating(selectedService.id)}
+                onAddReview={handleAddReview}
+              />
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {selectedAttraction && (
+          <Dialog open={!!selectedAttraction} onOpenChange={() => setSelectedAttractionId(null)}>
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+              <AttractionDetailModal attraction={selectedAttraction} />
+            </DialogContent>
+          </Dialog>
+        )}
+
+        <Toaster richColors position="top-right" />
+      </div>
+    </QueryClientProvider>
   );
 }
 
