@@ -35,6 +35,18 @@ module.exports = tseslint.config(
     },
   },
   {
+    // Build-time config files under apps/web (e.g. tailwind.config.js) run in
+    // Node, not the browser, and are plain .js (no react-hooks/react-refresh
+    // relevance) — give them Node globals so `console`/`fs` etc. aren't
+    // flagged by no-undef.
+    files: ['apps/web/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
     // SPEC_DEVIATION: shadcn-generated UI components re-export non-component
     // values (e.g. `buttonVariants`) alongside the component itself, which
     // trips react-refresh/only-export-components, and some re-export-only
