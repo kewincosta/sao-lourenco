@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MemoryRouter } from 'react-router-dom';
 import type { ReactNode } from 'react';
 
 import { resetDataSource } from '@/services/data-source';
@@ -20,7 +21,11 @@ function renderWithQueryClient(ui: ReactNode) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
-  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>{ui}</MemoryRouter>
+    </QueryClientProvider>,
+  );
 }
 
 // User 1 (Maria Silva Santos) owns seed services '1' and '13'.
@@ -35,7 +40,7 @@ describe('DashboardPage', () => {
   });
 
   it('shows the correct stats cards for the logged-in user services and reviews', async () => {
-    renderWithQueryClient(<DashboardPage onNavigate={() => {}} />);
+    renderWithQueryClient(<DashboardPage />);
 
     const expectedAverage =
       myReviews.length > 0
@@ -52,7 +57,7 @@ describe('DashboardPage', () => {
 
   it('adds a new service and shows it in the "Meus Serviços" list', async () => {
     const user = userEvent.setup();
-    renderWithQueryClient(<DashboardPage onNavigate={() => {}} />);
+    renderWithQueryClient(<DashboardPage />);
 
     await waitFor(() =>
       expect(screen.getByRole('heading', { name: 'Meus Serviços' })).toBeInTheDocument(),
@@ -70,7 +75,7 @@ describe('DashboardPage', () => {
 
   it('deletes a seed service belonging to the logged-in user and removes its card', async () => {
     const user = userEvent.setup();
-    renderWithQueryClient(<DashboardPage onNavigate={() => {}} />);
+    renderWithQueryClient(<DashboardPage />);
 
     const seedService = mockServices.find((s) => s.id === myServiceIds[0])!;
     await waitFor(() =>
@@ -92,7 +97,7 @@ describe('DashboardPage', () => {
 
   it('switches between "Meus Serviços" and "Avaliações Recebidas" tabs', async () => {
     const user = userEvent.setup();
-    renderWithQueryClient(<DashboardPage onNavigate={() => {}} />);
+    renderWithQueryClient(<DashboardPage />);
 
     await waitFor(() =>
       expect(screen.getByRole('heading', { name: 'Meus Serviços' })).toBeInTheDocument(),

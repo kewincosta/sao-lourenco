@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Button } from '@/shared/common/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/common/ui/tabs';
@@ -14,7 +15,8 @@ import { AddServiceForm } from './components/AddServiceForm';
 import { ServiceListItem } from './components/ServiceListItem';
 import { ReviewListItem } from './components/ReviewListItem';
 
-export function DashboardPage({ onNavigate }: { onNavigate: (view: string) => void }) {
+export function DashboardPage() {
+  const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const [showAddService, setShowAddService] = useState(false);
@@ -30,7 +32,7 @@ export function DashboardPage({ onNavigate }: { onNavigate: (view: string) => vo
 
   const handleLogout = () => {
     logout();
-    onNavigate('home');
+    navigate('/');
     toast.success('Logout realizado com sucesso');
   };
 

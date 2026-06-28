@@ -1,6 +1,7 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { toast } from 'sonner';
 import { RegisterPage } from './index';
 
@@ -10,6 +11,17 @@ vi.mock('sonner', () => ({
     error: vi.fn(),
   },
 }));
+
+function renderWithRouter() {
+  return render(
+    <MemoryRouter initialEntries={['/cadastro']}>
+      <Routes>
+        <Route path="/cadastro" element={<RegisterPage />} />
+        <Route path="/login" element={<div>Login Page Marker</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+}
 
 describe('RegisterPage', () => {
   beforeEach(() => {
@@ -27,8 +39,7 @@ describe('RegisterPage', () => {
   }
 
   it('shows a success toast on submit', async () => {
-    const onNavigate = vi.fn();
-    render(<RegisterPage onNavigate={onNavigate} />);
+    renderWithRouter();
 
     await fillAndSubmit();
 
@@ -36,11 +47,10 @@ describe('RegisterPage', () => {
   });
 
   it('navigates to login after submit', async () => {
-    const onNavigate = vi.fn();
-    render(<RegisterPage onNavigate={onNavigate} />);
+    renderWithRouter();
 
     await fillAndSubmit();
 
-    expect(onNavigate).toHaveBeenCalledWith('login');
+    expect(await screen.findByText('Login Page Marker')).toBeInTheDocument();
   });
 });

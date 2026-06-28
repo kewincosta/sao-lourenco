@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/shared/stores/auth.store';
 import { Button } from '@/shared/common/ui/button';
@@ -6,7 +7,8 @@ import { Input } from '@/shared/common/ui/input';
 import { Label } from '@/shared/common/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/common/ui/card';
 
-export function LoginPage({ onNavigate }: { onNavigate: (view: string) => void }) {
+export function LoginPage() {
+  const navigate = useNavigate();
   const [document, setDocument] = useState('');
   const login = useAuthStore((state) => state.login);
 
@@ -16,7 +18,7 @@ export function LoginPage({ onNavigate }: { onNavigate: (view: string) => void }
     if (success) {
       const loggedUser = useAuthStore.getState().user;
       toast.success(`Bem-vindo, ${loggedUser?.name}!`);
-      onNavigate('dashboard');
+      navigate('/dashboard');
       return;
     }
     toast.error('CPF/CNPJ não encontrado');

@@ -1,14 +1,17 @@
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Button } from '@/shared/common/ui/button';
 import { Input } from '@/shared/common/ui/input';
 import { Label } from '@/shared/common/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/common/ui/card';
 
-export function RegisterPage({ onNavigate }: { onNavigate: (view: string) => void }) {
+export function RegisterPage() {
+  const navigate = useNavigate();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success('Cadastro realizado! Faça login para continuar.');
-    onNavigate('login');
+    navigate('/login');
   };
 
   return (

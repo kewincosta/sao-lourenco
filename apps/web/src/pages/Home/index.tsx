@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent } from '@/shared/common/ui/dialog';
 import { Button } from '@/shared/common/ui/button';
 import { Input } from '@/shared/common/ui/input';
@@ -66,7 +67,8 @@ function HomeServiceCard({
   );
 }
 
-export function HomePage({ onNavigate }: { onNavigate: (view: string) => void }) {
+export function HomePage() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory | 'all'>('all');
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
@@ -84,7 +86,7 @@ export function HomePage({ onNavigate }: { onNavigate: (view: string) => void })
     .slice(0, 4);
 
   const handleSearch = () => {
-    onNavigate('services');
+    navigate('/servicos');
   };
 
   const categories = [
@@ -164,7 +166,7 @@ export function HomePage({ onNavigate }: { onNavigate: (view: string) => void })
                 key={key}
                 onClick={() => {
                   setSelectedCategory(key);
-                  onNavigate('services');
+                  navigate('/servicos');
                 }}
                 className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-accent/10 transition-all hover:scale-105 group"
               >
@@ -200,7 +202,7 @@ export function HomePage({ onNavigate }: { onNavigate: (view: string) => void })
             <Button
               variant="outline"
               size="lg"
-              onClick={() => onNavigate('services')}
+              onClick={() => navigate('/servicos')}
               className="px-8"
             >
               Ver Todos os Serviços
@@ -247,7 +249,7 @@ export function HomePage({ onNavigate }: { onNavigate: (view: string) => void })
             ))}
           </div>
           <div className="text-center">
-            <Button variant="outline" size="lg" onClick={() => onNavigate('attractions')}>
+            <Button variant="outline" size="lg" onClick={() => navigate('/atracoes')}>
               Ver Todas as Atrações
             </Button>
           </div>
@@ -264,7 +266,7 @@ export function HomePage({ onNavigate }: { onNavigate: (view: string) => void })
           </p>
           <Button
             size="lg"
-            onClick={() => onNavigate('register')}
+            onClick={() => navigate('/cadastro')}
             className="bg-white text-cta hover:bg-white/90 h-14 px-10 text-lg font-semibold shadow-xl"
           >
             Anunciar Meu Negócio

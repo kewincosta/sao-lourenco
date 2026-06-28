@@ -1,26 +1,23 @@
 import { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { House, MapPin, Briefcase, UserCircle, List, X } from '@phosphor-icons/react';
 import { Button } from '@/shared/common/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/shared/common/ui/sheet';
-import type { User } from '@/shared/types';
+import { useAuthStore } from '@/shared/stores/auth.store';
 
-interface HeaderProps {
-  currentView: string;
-  onNavigate: (view: string) => void;
-  user: User | null;
-}
-
-export function Header({ currentView, onNavigate, user }: HeaderProps) {
+export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const user = useAuthStore((state) => state.user);
 
   const navigation = [
-    { name: 'Início', view: 'home', icon: House },
-    { name: 'Serviços', view: 'services', icon: Briefcase },
-    { name: 'Atrações', view: 'attractions', icon: MapPin },
+    { name: 'Início', path: '/', icon: House },
+    { name: 'Serviços', path: '/servicos', icon: Briefcase },
+    { name: 'Atrações', path: '/atracoes', icon: MapPin },
   ];
 
-  const handleNavigate = (view: string) => {
-    onNavigate(view);
+  const handleNavigate = (path: string) => {
+    navigate(path);
     setIsOpen(false);
   };
 
@@ -29,7 +26,7 @@ export function Header({ currentView, onNavigate, user }: HeaderProps) {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <button
-            onClick={() => handleNavigate('home')}
+            onClick={() => handleNavigate('/')}
             className="flex items-center gap-3 hover:opacity-80 transition-opacity"
           >
             <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
@@ -49,14 +46,18 @@ export function Header({ currentView, onNavigate, user }: HeaderProps) {
             {navigation.map((item) => {
               const Icon = item.icon;
               return (
-                <Button
-                  key={item.view}
-                  variant="ghost"
-                  onClick={() => handleNavigate(item.view)}
-                  className={`text-base ${currentView === item.view ? 'bg-accent/10 text-primary font-semibold' : 'text-foreground hover:text-primary'}`}
-                >
-                  <Icon size={20} />
-                  {item.name}
+                <Button key={item.path} variant="ghost" asChild className="text-base">
+                  <NavLink
+                    to={item.path}
+                    className={({ isActive }) =>
+                      isActive
+                        ? 'bg-accent/10 text-primary font-semibold'
+                        : 'text-foreground hover:text-primary'
+                    }
+                  >
+                    <Icon size={20} />
+                    {item.name}
+                  </NavLink>
                 </Button>
               );
             })}
@@ -67,7 +68,7 @@ export function Header({ currentView, onNavigate, user }: HeaderProps) {
               <>
                 <Button
                   variant="ghost"
-                  onClick={() => handleNavigate('dashboard')}
+                  onClick={() => handleNavigate('/dashboard')}
                   className="text-base"
                 >
                   <UserCircle size={20} />
@@ -78,13 +79,13 @@ export function Header({ currentView, onNavigate, user }: HeaderProps) {
               <>
                 <Button
                   variant="ghost"
-                  onClick={() => handleNavigate('login')}
+                  onClick={() => handleNavigate('/login')}
                   className="text-base"
                 >
                   Entrar
                 </Button>
                 <Button
-                  onClick={() => handleNavigate('register')}
+                  onClick={() => handleNavigate('/cadastro')}
                   className="bg-cta hover:bg-cta/90 text-cta-foreground font-semibold"
                 >
                   Anunciar Serviço
@@ -105,9 +106,9 @@ export function Header({ currentView, onNavigate, user }: HeaderProps) {
                   const Icon = item.icon;
                   return (
                     <Button
-                      key={item.view}
-                      variant={currentView === item.view ? 'default' : 'ghost'}
-                      onClick={() => handleNavigate(item.view)}
+                      key={item.path}
+                      variant="ghost"
+                      onClick={() => handleNavigate(item.path)}
                       className="justify-start"
                     >
                       <Icon size={20} />
@@ -119,7 +120,7 @@ export function Header({ currentView, onNavigate, user }: HeaderProps) {
                   {user ? (
                     <Button
                       variant="outline"
-                      onClick={() => handleNavigate('dashboard')}
+                      onClick={() => handleNavigate('/dashboard')}
                       className="w-full justify-start"
                     >
                       <UserCircle size={20} />
@@ -129,13 +130,13 @@ export function Header({ currentView, onNavigate, user }: HeaderProps) {
                     <>
                       <Button
                         variant="outline"
-                        onClick={() => handleNavigate('login')}
+                        onClick={() => handleNavigate('/login')}
                         className="w-full mb-2"
                       >
                         Entrar
                       </Button>
                       <Button
-                        onClick={() => handleNavigate('register')}
+                        onClick={() => handleNavigate('/cadastro')}
                         className="w-full bg-cta hover:bg-cta/90 text-cta-foreground"
                       >
                         Anunciar Serviço
