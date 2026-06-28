@@ -1,0 +1,1 @@
+export { AttractionCard } from './AttractionCard';

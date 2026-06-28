@@ -4,9 +4,10 @@ import { Toaster, toast } from 'sonner';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { ServiceCard } from './components/ServiceCard';
-import { AttractionCard } from './components/AttractionCard';
+import { AttractionCard } from '@/shared/domain/AttractionCard';
 import { RegisterPage } from '@/pages/Register';
 import { LoginPage } from '@/pages/Login';
+import { AttractionsPage } from '@/pages/Attractions';
 import { useAuthStore } from '@/shared/stores/auth.store';
 import { RatingStars } from '@/shared/common/RatingStars/RatingStars';
 import { Button } from '@/shared/common/ui/button';
@@ -71,7 +72,6 @@ function App() {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
-  const [selectedAttractionId, setSelectedAttractionId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<ServiceCategory | 'all'>('all');
 
@@ -95,10 +95,6 @@ function App() {
   const selectedService = useMemo(() => {
     return allServices.find((s) => s.id === selectedServiceId) || null;
   }, [allServices, selectedServiceId]);
-
-  const selectedAttraction = useMemo(() => {
-    return mockAttractions.find((a) => a.id === selectedAttractionId) || null;
-  }, [selectedAttractionId]);
 
   const getServiceProvider = (userId: string) => {
     const provider = mockUsers.find((u) => u.id === userId);
@@ -153,9 +149,7 @@ function App() {
           {currentView === 'home' && (
             <HomePage onNavigate={setCurrentView} onServiceClick={setSelectedServiceId} />
           )}
-          {currentView === 'attractions' && (
-            <AttractionsPage onAttractionClick={setSelectedAttractionId} />
-          )}
+          {currentView === 'attractions' && <AttractionsPage />}
           {currentView === 'services' && (
             <ServicesPage
               services={filteredServices}
@@ -195,14 +189,6 @@ function App() {
                 averageRating={getServiceAverageRating(selectedService.id)}
                 onAddReview={handleAddReview}
               />
-            </DialogContent>
-          </Dialog>
-        )}
-
-        {selectedAttraction && (
-          <Dialog open={!!selectedAttraction} onOpenChange={() => setSelectedAttractionId(null)}>
-            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-              <AttractionDetailModal attraction={selectedAttraction} />
             </DialogContent>
           </Dialog>
         )}
@@ -440,30 +426,6 @@ function HomePage({
         </div>
       </section>
     </>
-  );
-}
-
-function AttractionsPage({ onAttractionClick }: { onAttractionClick: (id: string) => void }) {
-  return (
-    <section className="py-16">
-      <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4">Atrações Turísticas</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explore as maravilhas naturais e culturais de São Lourenço
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {mockAttractions.map((attraction) => (
-            <AttractionCard
-              key={attraction.id}
-              attraction={attraction}
-              onClick={() => onAttractionClick(attraction.id)}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -1065,86 +1027,6 @@ function ServiceDetailModal({
             <Phone size={20} />
             Entrar em Contato
           </Button>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function AttractionDetailModal({
-  attraction,
-}: {
-  attraction: {
-    id: string;
-    name: string;
-    description: string;
-    category: string;
-    images: string[];
-    address: string;
-    schedule?: string;
-    entryFee?: string;
-    highlights: string[];
-  };
-}) {
-  return (
-    <>
-      <DialogHeader>
-        <DialogTitle className="text-2xl font-serif">{attraction.name}</DialogTitle>
-      </DialogHeader>
-
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {attraction.images.map((img, idx) => (
-            <img
-              key={idx}
-              src={img}
-              alt={`${attraction.name} ${idx + 1}`}
-              className="w-full aspect-video object-cover rounded-lg"
-            />
-          ))}
-        </div>
-
-        <div>
-          <h3 className="font-semibold mb-2">Sobre</h3>
-          <p className="text-muted-foreground">{attraction.description}</p>
-        </div>
-
-        <Separator />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <h3 className="font-semibold mb-3">Informações</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex items-start gap-2">
-                <MapPin size={18} className="text-muted-foreground shrink-0 mt-0.5" />
-                <span>{attraction.address}</span>
-              </div>
-              {attraction.schedule && (
-                <div>
-                  <p className="font-medium">Horário</p>
-                  <p className="text-muted-foreground">{attraction.schedule}</p>
-                </div>
-              )}
-              {attraction.entryFee && (
-                <div>
-                  <p className="font-medium">Entrada</p>
-                  <p className="text-muted-foreground">{attraction.entryFee}</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="font-semibold mb-3">Destaques</h3>
-            <ul className="space-y-1 text-sm">
-              {attraction.highlights.map((highlight, idx) => (
-                <li key={idx} className="flex items-start gap-2">
-                  <span className="text-cta mt-1">•</span>
-                  <span>{highlight}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
       </div>
     </>
