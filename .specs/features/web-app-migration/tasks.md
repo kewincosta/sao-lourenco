@@ -9,7 +9,7 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 ---
 
 **Design**: `.specs/features/web-app-migration/design.md`
-**Status**: Draft
+**Status**: Done
 
 ---
 
@@ -274,6 +274,7 @@ T7 ──┬─→ T8 [P]
 **Tests**: none
 **Gate**: Build (raiz)
 **Commit**: `docs(web): document migrated web app`
+**Status**: ✅ Done (commit `cd93ebc`; `apps/web/README.md` não existia desde o T1 — criado aqui já com a descrição do app real)
 
 ---
 
@@ -296,6 +297,7 @@ T7 ──┬─→ T8 [P]
 **Tests**: none
 **Gate**: Build (raiz)
 **Commit**: `chore(repo): remove cloned project directory after migration`
+**Status**: ✅ Done (commit `c50824e`; também removido o ignore temporário `portal-turstico-so-l/**` do `eslint.config.js` raiz, registrado como obsoleto no T7)
 
 ---
 
