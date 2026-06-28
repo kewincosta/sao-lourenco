@@ -1,14 +1,13 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster, toast } from 'sonner';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { ServiceCard } from '@/shared/domain/ServiceCard';
-import { ServiceDetailModal } from '@/shared/domain/ServiceDetailModal';
 import { RegisterPage } from '@/pages/Register';
 import { LoginPage } from '@/pages/Login';
 import { AttractionsPage } from '@/pages/Attractions';
 import { HomePage } from '@/pages/Home';
+import { ServicesPage } from '@/pages/Services';
 import { useAuthStore } from '@/shared/stores/auth.store';
 import { RatingStars } from '@/shared/common/RatingStars/RatingStars';
 import { Button } from '@/shared/common/ui/button';
@@ -25,9 +24,7 @@ import {
 import { Textarea } from '@/shared/common/ui/textarea';
 import { Badge } from '@/shared/common/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/common/ui/tabs';
-import { Dialog, DialogContent } from '@/shared/common/ui/dialog';
 import {
-  MagnifyingGlass,
   Star,
   Briefcase,
   Phone,
@@ -37,7 +34,7 @@ import {
   Pencil,
   Trash,
 } from '@phosphor-icons/react';
-import { mockUsers, mockServices, mockReviews } from '@/services/mock-data';
+import { mockServices, mockReviews } from '@/services/mock-data';
 import {
   categoryLabels,
   type User as UserType,
@@ -60,45 +57,8 @@ function App() {
   const [currentView, setCurrentView] = useState('home');
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
-  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState<ServiceCategory | 'all'>('all');
-
   const [userServices, setUserServices] = useState<Service[]>([]);
   const [allReviews] = useState<Review[]>(mockReviews);
-
-  const allServices = useMemo(() => {
-    return [...mockServices, ...(userServices || [])];
-  }, [userServices]);
-
-  const filteredServices = useMemo(() => {
-    return allServices.filter((service) => {
-      const matchesSearch =
-        service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        service.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = categoryFilter === 'all' || service.category === categoryFilter;
-      return matchesSearch && matchesCategory;
-    });
-  }, [allServices, searchQuery, categoryFilter]);
-
-  const selectedService = useMemo(() => {
-    return allServices.find((s) => s.id === selectedServiceId) || null;
-  }, [allServices, selectedServiceId]);
-
-  const getServiceProvider = (userId: string) => {
-    const provider = mockUsers.find((u) => u.id === userId);
-    return provider?.name || 'Provedor';
-  };
-
-  const getServiceReviews = (serviceId: string) => {
-    return (allReviews || []).filter((r) => r.serviceId === serviceId);
-  };
-
-  const getServiceAverageRating = (serviceId: string) => {
-    const reviews = getServiceReviews(serviceId);
-    if (reviews.length === 0) return 0;
-    return reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
-  };
 
   const handleLogout = () => {
     logout();
@@ -119,19 +79,7 @@ function App() {
         <main className="flex-1">
           {currentView === 'home' && <HomePage onNavigate={setCurrentView} />}
           {currentView === 'attractions' && <AttractionsPage />}
-          {currentView === 'services' && (
-            <ServicesPage
-              services={filteredServices}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              categoryFilter={categoryFilter}
-              setCategoryFilter={setCategoryFilter}
-              onServiceClick={setSelectedServiceId}
-              getServiceProvider={getServiceProvider}
-              getServiceAverageRating={getServiceAverageRating}
-              getServiceReviews={getServiceReviews}
-            />
-          )}
+          {currentView === 'services' && <ServicesPage />}
           {currentView === 'login' && <LoginPage onNavigate={setCurrentView} />}
           {currentView === 'register' && <RegisterPage onNavigate={setCurrentView} />}
           {currentView === 'dashboard' && user && (
@@ -148,110 +96,9 @@ function App() {
 
         <Footer />
 
-        {selectedService && (
-          <Dialog open={!!selectedService} onOpenChange={() => setSelectedServiceId(null)}>
-            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-              <ServiceDetailModal serviceId={selectedService.id} />
-            </DialogContent>
-          </Dialog>
-        )}
-
         <Toaster richColors position="top-right" />
       </div>
     </QueryClientProvider>
-  );
-}
-
-interface ServicesPageProps {
-  services: Service[];
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  categoryFilter: ServiceCategory | 'all';
-  setCategoryFilter: (category: ServiceCategory | 'all') => void;
-  onServiceClick: (id: string) => void;
-  getServiceProvider: (userId: string) => string;
-  getServiceAverageRating: (serviceId: string) => number;
-  getServiceReviews: (serviceId: string) => Review[];
-}
-
-function ServicesPage({
-  services,
-  searchQuery,
-  setSearchQuery,
-  categoryFilter,
-  setCategoryFilter,
-  onServiceClick,
-  getServiceProvider,
-  getServiceAverageRating,
-  getServiceReviews,
-}: ServicesPageProps) {
-  return (
-    <section className="py-16">
-      <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4">Serviços Turísticos</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Encontre os melhores profissionais e empresas da região
-          </p>
-        </div>
-
-        <div className="mb-8 flex flex-col md:flex-row gap-4">
-          <div className="relative flex-1">
-            <MagnifyingGlass
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-              size={20}
-            />
-            <Input
-              placeholder="Buscar serviços..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          <Select
-            value={categoryFilter}
-            onValueChange={(value) => setCategoryFilter(value as ServiceCategory | 'all')}
-          >
-            <SelectTrigger className="w-full md:w-64">
-              <SelectValue placeholder="Categoria" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todas as Categorias</SelectItem>
-              {Object.entries(categoryLabels).map(([key, label]) => (
-                <SelectItem key={key} value={key}>
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {services.length === 0 ? (
-          <Card className="py-16 text-center">
-            <CardContent>
-              <Briefcase size={48} className="mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-xl font-semibold mb-2">Nenhum serviço encontrado</h3>
-              <p className="text-muted-foreground">
-                Tente ajustar os filtros ou buscar por outros termos
-              </p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                provider={getServiceProvider(service.userId)}
-                averageRating={getServiceAverageRating(service.id)}
-                reviewCount={getServiceReviews(service.id).length}
-                onClick={() => onServiceClick(service.id)}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
   );
 }
 
